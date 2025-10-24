@@ -1,6 +1,6 @@
 **
-!syntax
-!dist/extension.js
-!CHANGELOG.md
+!dist
+!languages
+!schemas
+!syntaxes
 !LICENSE
-!language-configuration.json

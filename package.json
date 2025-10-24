@@ -22,13 +22,8 @@
     "commands": [
       {
         "category": "Vue",
-        "command": "vue.welcome",
-        "title": "Welcome"
-      },
-      {
-        "category": "Vue",
-        "command": "vue.action.restartServer",
-        "title": "Restart Vue and TS servers"
+        "command": "vue.action.restartLanguageServer",
+        "title": "Restart Vue Language Server"
       }
     ],
     "configuration": {
@@ -39,28 +34,8 @@
           "type": "boolean"
         },
         "vue.autoInsert.dotValue": {
-          "default": false,
+          "default": true,
           "markdownDescription": "Auto-complete Ref value with `.value`.",
-          "type": "boolean"
-        },
-        "vue.codeActions.askNewComponentName": {
-          "default": true,
-          "markdownDescription": "Ask for new component name when extract component.",
-          "type": "boolean"
-        },
-        "vue.editor.focusMode": {
-          "default": false,
-          "markdownDescription": "Fade top-level SFC tags.",
-          "type": "boolean"
-        },
-        "vue.editor.reactivityVisualization": {
-          "default": true,
-          "markdownDescription": "Reactivity system visualization.",
-          "type": "boolean"
-        },
-        "vue.editor.templateInterpolationDecorators": {
-          "default": true,
-          "markdownDescription": "Enhanced template interpolation highlighting.",
           "type": "boolean"
         },
         "vue.format.script.initialIndent": {
@@ -74,7 +49,7 @@
           "type": "boolean"
         },
         "vue.format.template.initialIndent": {
-          "default": true,
+          "default": false,
           "markdownDescription": "Initial indent for `<template>` block.",
           "type": "boolean"
         },
@@ -93,42 +68,42 @@
           "type": "string"
         },
         "vue.inlayHints.destructuredProps": {
-          "default": false,
+          "default": true,
           "markdownDescription": "Show inlay hints for destructured props:\n\n```ts\nwatch(() => /* props. */foo, () => { ... });\n```",
           "type": "boolean"
         },
         "vue.inlayHints.inlineHandlerLeading": {
-          "default": false,
+          "default": true,
           "markdownDescription": "Show inlay hints for event argument in inline handlers:\n\n```html\n<Comp @foo=\"/* $event => */console.log($event)\" />\n```",
           "type": "boolean"
         },
         "vue.inlayHints.missingProps": {
-          "default": false,
+          "default": true,
           "markdownDescription": "Show inlay hints for missing required props:\n\n```html\n<Comp />\n<!-- ^ foo! -->\n```",
           "type": "boolean"
         },
         "vue.inlayHints.optionsWrapper": {
-          "default": false,
+          "default": true,
           "markdownDescription": "Show inlay hints for component options wrapper for type support:\n\n```vue\n<script lang=\"ts\">\nexport default /* (await import('vue')).defineComponent( */{}/* ) */;\n</script>\n```",
           "type": "boolean"
         },
         "vue.inlayHints.vBindShorthand": {
-          "default": false,
+          "default": true,
           "markdownDescription": "Show inlay hints for v-bind shorthand:\n\n```html\n<Comp :foo />\n     <!-- ^ =\"foo\" -->\n```",
           "type": "boolean"
         },
-        "vue.server.includeLanguages": {
-          "default": [
-            "vue"
-          ],
-          "items": {
-            "type": "string"
-          },
-          "markdownDescription": "Configure the languages for which the extension should be activated.",
-          "type": "array"
-        },
         "vue.server.path": {
           "markdownDescription": "Path to the `@vue/language-server` module. If not set, the server will be loaded from the extension's bundled.",
+          "type": "string"
+        },
+        "vue.server.trace": {
+          "default": "off",
+          "enum": [
+            "off",
+            "messages",
+            "verbose"
+          ],
+          "markdownDescription": "Traces the communication between VS Code and the language server.",
           "type": "string"
         },
         "vue.suggest.componentNameCasing": {
@@ -146,6 +121,7 @@
             "Always PascalCase (enforce PascalCase, e.g. MyComponent)"
           ],
           "markdownDescription": "Preferred component name case.",
+          "scope": "resource",
           "type": "string"
         },
         "vue.suggest.defineAssignment": {
@@ -168,22 +144,11 @@
             "Always camelCase (enforce camelCase, e.g. myProp)"
           ],
           "markdownDescription": "Preferred attr name case.",
-          "type": "string"
-        },
-        "vue.trace.server": {
-          "default": "off",
-          "enum": [
-            "off",
-            "messages",
-            "verbose"
-          ],
-          "markdownDescription": "Traces the communication between VS Code and the language server.",
-          "scope": "window",
+          "scope": "resource",
           "type": "string"
         }
       },
-      "title": "Vue",
-      "type": "object"
+      "title": "Vue"
     },
     "grammars": [
       {
@@ -372,24 +337,24 @@
         },
         {
           "command": "typescript.sortImports",
-          "when": "supportedCodeAction =~ /(\\s|^)source\\.sortImports\\b/ && editorLangId =~ /^vue$/"
+          "when": "editorLangId == vue && supportedCodeAction =~ /(\\s|^)source\\.sortImports\\b/"
         },
         {
           "command": "typescript.removeUnusedImports",
-          "when": "supportedCodeAction =~ /(\\s|^)source\\.removeUnusedImports\\b/ && editorLangId =~ /^vue$/"
+          "when": "editorLangId == vue && supportedCodeAction =~ /(\\s|^)source\\.removeUnusedImports\\b/"
         }
       ],
       "editor/context": [
         {
           "command": "typescript.goToSourceDefinition",
           "group": "navigation@9",
-          "when": "tsSupportsSourceDefinition && resourceLangId == vue"
+          "when": "tsSupportsSourceDefinition && editorLangId == vue"
         }
       ],
       "editor/title/context": [
         {
           "command": "typescript.findAllFileReferences",
-          "when": "tsSupportsFileReferences && resourceLangId == vue"
+          "when": "tsSupportsFileReferences && editorLangId == vue"
         }
       ],
       "explorer/context": [
@@ -428,33 +393,41 @@
           ]
         }
       }
+    ],
+    "typescriptServerPlugins": [
+      {
+        "configNamespace": "typescript",
+        "enableForWorkspaceTypeScriptVersions": true,
+        "languages": [
+          "javascriptreact",
+          "typescriptreact",
+          "vue"
+        ],
+        "name": "@vue/typescript-plugin"
+      }
     ]
   },
-  "description": "Vue language supports based on volar.",
+  "dependencies": {
+    "@vue/typescript-plugin": "^3.1.1"
+  },
+  "description": "Vue language supports based on @vue/language-server.",
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.8",
+    "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-replace": "^6.0.2",
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^12.3.0",
-    "@types/mocha": "^10.0.10",
     "@types/node": "~22.17.2",
-    "@types/semver": "^7.7.1",
     "@types/vscode": "^1.105.0",
-    "@types/which": "^3.0.4",
-    "@vue/compiler-sfc": "^3.5.22",
+    "@volar/typescript": "^2.4.23",
+    "@volar/vscode": "^2.4.23",
     "@vue/language-server": "^3.1.1",
-    "@vue/typescript-plugin": "^3.1.1",
-    "laplacenoma": "^0.0.3",
+    "ignore": "^7.0.5",
     "oxlint": "^1.24.0",
-    "reactive-vscode": "^0.4.0",
     "rollup": "^4.52.5",
-    "semver": "^7.7.3",
     "tslib": "^2.8.1",
-    "typescript": "^5.9.3",
-    "vscode-languageclient": "^9.0.1",
-    "vscode-tmlanguage-snapshot": "^0.1.3",
-    "which": "^5.0.0"
+    "typescript": "^5.9.3"
   },
   "displayName": "Vue",
   "engines": {
@@ -468,6 +441,7 @@
   "name": "vue",
   "packageManager": "pnpm@10.19.0",
   "prettier": {
+    "checkIgnorePragma": true,
     "semi": false,
     "singleQuote": true
   },
@@ -478,12 +452,11 @@
     "url": "https://github.com/xingqingxyz/vue"
   },
   "scripts": {
-    "install-extension": "vsce pack -o vue.vsix && code --install-extension vue.vsix",
+    "install-extension": "rollup -c --environment NODE_ENV:production && cd build && vsce pack -o vue.vsix --follow-symlinks && code --install-extension vue.vsix",
     "lint": "tsc --noEmit && oxlint --fix src",
-    "vscode:prepublish": "concurrently \"rollup -c --environment NODE_ENV:production\" \"rollup -c --environment NODE_ENV:production,PLATFORM:web\"",
-    "watch": "rollup -c -w",
-    "watch-web": "rollup -c -w --environment PLATFORM:web"
+    "postinstall": "node ./scripts/postinstall.ts",
+    "watch": "rollup -c -w"
   },
   "type": "module",
-  "version": "0.2.0"
+  "version": "0.1.0"
 }
