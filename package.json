@@ -1,0 +1,489 @@
+{
+  "author": "Ming Chen <cm.email@qq.com> (https://github.com/xingqingxyz)",
+  "bugs": {
+    "url": "https://github.com/xingqingxyz/vue/issues"
+  },
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true
+    },
+    "virtualWorkspaces": true
+  },
+  "categories": [
+    "Programming Languages",
+    "Formatters"
+  ],
+  "contributes": {
+    "breakpoints": [
+      {
+        "language": "vue"
+      }
+    ],
+    "commands": [
+      {
+        "category": "Vue",
+        "command": "vue.welcome",
+        "title": "Welcome"
+      },
+      {
+        "category": "Vue",
+        "command": "vue.action.restartServer",
+        "title": "Restart Vue and TS servers"
+      }
+    ],
+    "configuration": {
+      "properties": {
+        "vue.autoInsert.bracketSpacing": {
+          "default": true,
+          "markdownDescription": "Auto add space between double curly brackets: `{{|}}` -> `{{ | }}`",
+          "type": "boolean"
+        },
+        "vue.autoInsert.dotValue": {
+          "default": false,
+          "markdownDescription": "Auto-complete Ref value with `.value`.",
+          "type": "boolean"
+        },
+        "vue.codeActions.askNewComponentName": {
+          "default": true,
+          "markdownDescription": "Ask for new component name when extract component.",
+          "type": "boolean"
+        },
+        "vue.editor.focusMode": {
+          "default": false,
+          "markdownDescription": "Fade top-level SFC tags.",
+          "type": "boolean"
+        },
+        "vue.editor.reactivityVisualization": {
+          "default": true,
+          "markdownDescription": "Reactivity system visualization.",
+          "type": "boolean"
+        },
+        "vue.editor.templateInterpolationDecorators": {
+          "default": true,
+          "markdownDescription": "Enhanced template interpolation highlighting.",
+          "type": "boolean"
+        },
+        "vue.format.script.initialIndent": {
+          "default": false,
+          "markdownDescription": "Initial indent for `<script>` block.",
+          "type": "boolean"
+        },
+        "vue.format.style.initialIndent": {
+          "default": false,
+          "markdownDescription": "Initial indent for `<style>` block.",
+          "type": "boolean"
+        },
+        "vue.format.template.initialIndent": {
+          "default": true,
+          "markdownDescription": "Initial indent for `<template>` block.",
+          "type": "boolean"
+        },
+        "vue.format.wrapAttributes": {
+          "default": "auto",
+          "enum": [
+            "auto",
+            "force",
+            "force-aligned",
+            "force-expand-multiline",
+            "aligned-multiple",
+            "preserve",
+            "preserve-aligned"
+          ],
+          "markdownDescription": "Wrap attributes.",
+          "type": "string"
+        },
+        "vue.inlayHints.destructuredProps": {
+          "default": false,
+          "markdownDescription": "Show inlay hints for destructured props:\n\n```ts\nwatch(() => /* props. */foo, () => { ... });\n```",
+          "type": "boolean"
+        },
+        "vue.inlayHints.inlineHandlerLeading": {
+          "default": false,
+          "markdownDescription": "Show inlay hints for event argument in inline handlers:\n\n```html\n<Comp @foo=\"/* $event => */console.log($event)\" />\n```",
+          "type": "boolean"
+        },
+        "vue.inlayHints.missingProps": {
+          "default": false,
+          "markdownDescription": "Show inlay hints for missing required props:\n\n```html\n<Comp />\n<!-- ^ foo! -->\n```",
+          "type": "boolean"
+        },
+        "vue.inlayHints.optionsWrapper": {
+          "default": false,
+          "markdownDescription": "Show inlay hints for component options wrapper for type support:\n\n```vue\n<script lang=\"ts\">\nexport default /* (await import('vue')).defineComponent( */{}/* ) */;\n</script>\n```",
+          "type": "boolean"
+        },
+        "vue.inlayHints.vBindShorthand": {
+          "default": false,
+          "markdownDescription": "Show inlay hints for v-bind shorthand:\n\n```html\n<Comp :foo />\n     <!-- ^ =\"foo\" -->\n```",
+          "type": "boolean"
+        },
+        "vue.server.includeLanguages": {
+          "default": [
+            "vue"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "markdownDescription": "Configure the languages for which the extension should be activated.",
+          "type": "array"
+        },
+        "vue.server.path": {
+          "markdownDescription": "Path to the `@vue/language-server` module. If not set, the server will be loaded from the extension's bundled.",
+          "type": "string"
+        },
+        "vue.suggest.componentNameCasing": {
+          "default": "preferPascalCase",
+          "enum": [
+            "preferKebabCase",
+            "preferPascalCase",
+            "alwaysKebabCase",
+            "alwaysPascalCase"
+          ],
+          "enumDescriptions": [
+            "Prefer kebab-case (lowercase with hyphens, e.g. my-component)",
+            "Prefer PascalCase (UpperCamelCase, e.g. MyComponent)",
+            "Always kebab-case (enforce kebab-case, e.g. my-component)",
+            "Always PascalCase (enforce PascalCase, e.g. MyComponent)"
+          ],
+          "markdownDescription": "Preferred component name case.",
+          "type": "string"
+        },
+        "vue.suggest.defineAssignment": {
+          "default": true,
+          "markdownDescription": "Auto add `const props = ` before `defineProps` when selecting the completion item `props`. (also `emit` and `slots`)",
+          "type": "boolean"
+        },
+        "vue.suggest.propNameCasing": {
+          "default": "preferKebabCase",
+          "enum": [
+            "preferKebabCase",
+            "preferCamelCase",
+            "alwaysKebabCase",
+            "alwaysCamelCase"
+          ],
+          "enumDescriptions": [
+            "Prefer kebab-case (lowercase with hyphens, e.g. my-prop)",
+            "Prefer camelCase (lowerCamelCase, e.g. myProp)",
+            "Always kebab-case (enforce kebab-case, e.g. my-prop)",
+            "Always camelCase (enforce camelCase, e.g. myProp)"
+          ],
+          "markdownDescription": "Preferred attr name case.",
+          "type": "string"
+        },
+        "vue.trace.server": {
+          "default": "off",
+          "enum": [
+            "off",
+            "messages",
+            "verbose"
+          ],
+          "markdownDescription": "Traces the communication between VS Code and the language server.",
+          "scope": "window",
+          "type": "string"
+        }
+      },
+      "title": "Vue",
+      "type": "object"
+    },
+    "grammars": [
+      {
+        "embeddedLanguages": {
+          "meta.tag.js": "jsx-tags",
+          "meta.tag.tsx": "jsx-tags",
+          "meta.tag.without-attributes.js": "jsx-tags",
+          "meta.tag.without-attributes.tsx": "jsx-tags",
+          "source.coffee": "coffeescript",
+          "source.css": "css",
+          "source.css.less": "less",
+          "source.css.scss": "scss",
+          "source.graphql": "graphql",
+          "source.js": "javascript",
+          "source.js.jsx": "javascriptreact",
+          "source.json": "json",
+          "source.json.comments": "jsonc",
+          "source.json5": "json5",
+          "source.postcss": "postcss",
+          "source.sass": "sass",
+          "source.stylus": "stylus",
+          "source.toml": "toml",
+          "source.ts": "typescript",
+          "source.tsx": "typescriptreact",
+          "source.vue": "vue",
+          "source.yaml": "yaml",
+          "text": "plaintext",
+          "text.html.derivative": "html",
+          "text.html.markdown": "markdown",
+          "text.pug": "jade"
+        },
+        "language": "vue",
+        "path": "./syntaxes/vue.tmLanguage.json",
+        "scopeName": "source.vue",
+        "unbalancedBracketScopes": [
+          "keyword.operator.relational",
+          "storage.type.function.arrow",
+          "keyword.operator.bitwise.shift",
+          "meta.brace.angle",
+          "punctuation.definition.tag"
+        ]
+      },
+      {
+        "embeddedLanguages": {
+          "meta.embedded.block.vue": "vue",
+          "meta.tag.js": "jsx-tags",
+          "meta.tag.tsx": "jsx-tags",
+          "meta.tag.without-attributes.js": "jsx-tags",
+          "meta.tag.without-attributes.tsx": "jsx-tags",
+          "source.coffee": "coffeescript",
+          "source.css": "css",
+          "source.css.less": "less",
+          "source.css.scss": "scss",
+          "source.graphql": "graphql",
+          "source.js": "javascript",
+          "source.js.jsx": "javascriptreact",
+          "source.json": "json",
+          "source.json.comments": "jsonc",
+          "source.json5": "json5",
+          "source.postcss": "postcss",
+          "source.sass": "sass",
+          "source.stylus": "stylus",
+          "source.toml": "toml",
+          "source.ts": "typescript",
+          "source.tsx": "typescriptreact",
+          "source.vue": "vue",
+          "source.yaml": "yaml",
+          "text": "plaintext",
+          "text.html.derivative": "html",
+          "text.html.markdown": "markdown",
+          "text.pug": "jade"
+        },
+        "injectTo": [
+          "text.html.markdown"
+        ],
+        "path": "./syntaxes/markdown-vue.json",
+        "scopeName": "markdown.vue.codeblock"
+      },
+      {
+        "embeddedLanguages": {
+          "mdx.embedded.vue": "vue",
+          "meta.tag.js": "jsx-tags",
+          "meta.tag.tsx": "jsx-tags",
+          "meta.tag.without-attributes.js": "jsx-tags",
+          "meta.tag.without-attributes.tsx": "jsx-tags",
+          "source.coffee": "coffeescript",
+          "source.css": "css",
+          "source.css.less": "less",
+          "source.css.scss": "scss",
+          "source.graphql": "graphql",
+          "source.js": "javascript",
+          "source.js.jsx": "javascriptreact",
+          "source.json": "json",
+          "source.json.comments": "jsonc",
+          "source.json5": "json5",
+          "source.postcss": "postcss",
+          "source.sass": "sass",
+          "source.stylus": "stylus",
+          "source.toml": "toml",
+          "source.ts": "typescript",
+          "source.tsx": "typescriptreact",
+          "source.vue": "vue",
+          "source.yaml": "yaml",
+          "text": "plaintext",
+          "text.html.derivative": "html",
+          "text.html.markdown": "markdown",
+          "text.pug": "jade"
+        },
+        "injectTo": [
+          "source.mdx"
+        ],
+        "path": "./syntaxes/mdx-vue.json",
+        "scopeName": "mdx.vue.codeblock"
+      },
+      {
+        "injectTo": [
+          "source.vue",
+          "text.html.markdown",
+          "text.html.derivative",
+          "text.pug"
+        ],
+        "path": "./syntaxes/vue-directives.json",
+        "scopeName": "vue.directives"
+      },
+      {
+        "injectTo": [
+          "source.vue",
+          "text.html.markdown",
+          "text.html.derivative",
+          "text.pug"
+        ],
+        "path": "./syntaxes/vue-interpolations.json",
+        "scopeName": "vue.interpolations"
+      },
+      {
+        "injectTo": [
+          "source.vue"
+        ],
+        "path": "./syntaxes/vue-sfc-style-variable-injection.json",
+        "scopeName": "vue.sfc.style.variable.injection"
+      }
+    ],
+    "jsonValidation": [
+      {
+        "fileMatch": [
+          "tsconfig.json",
+          "tsconfig.*.json",
+          "tsconfig-*.json",
+          "jsconfig.json",
+          "jsconfig.*.json",
+          "jsconfig-*.json"
+        ],
+        "url": "./schemas/vue-tsconfig.schema.json"
+      }
+    ],
+    "languages": [
+      {
+        "configuration": "./languages/vue-language-configuration.json",
+        "extensions": [
+          ".vue"
+        ],
+        "id": "vue"
+      },
+      {
+        "configuration": "./languages/markdown-language-configuration.json",
+        "id": "markdown"
+      },
+      {
+        "configuration": "./languages/sfc-template-language-configuration.json",
+        "id": "html"
+      },
+      {
+        "configuration": "./languages/sfc-template-language-configuration.json",
+        "id": "jade"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "typescript.reloadProjects",
+          "when": "editorLangId == vue && typescript.isManagedFile"
+        },
+        {
+          "command": "typescript.goToProjectConfig",
+          "when": "editorLangId == vue && typescript.isManagedFile"
+        },
+        {
+          "command": "typescript.sortImports",
+          "when": "supportedCodeAction =~ /(\\s|^)source\\.sortImports\\b/ && editorLangId =~ /^vue$/"
+        },
+        {
+          "command": "typescript.removeUnusedImports",
+          "when": "supportedCodeAction =~ /(\\s|^)source\\.removeUnusedImports\\b/ && editorLangId =~ /^vue$/"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "typescript.goToSourceDefinition",
+          "group": "navigation@9",
+          "when": "tsSupportsSourceDefinition && resourceLangId == vue"
+        }
+      ],
+      "editor/title/context": [
+        {
+          "command": "typescript.findAllFileReferences",
+          "when": "tsSupportsFileReferences && resourceLangId == vue"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "typescript.findAllFileReferences",
+          "group": "4_search",
+          "when": "tsSupportsFileReferences && resourceLangId == vue"
+        }
+      ]
+    },
+    "semanticTokenScopes": [
+      {
+        "language": "vue",
+        "scopes": {
+          "component": [
+            "support.class.component.vue",
+            "entity.name.type.class.vue"
+          ]
+        }
+      },
+      {
+        "language": "markdown",
+        "scopes": {
+          "component": [
+            "support.class.component.vue",
+            "entity.name.type.class.vue"
+          ]
+        }
+      },
+      {
+        "language": "html",
+        "scopes": {
+          "component": [
+            "support.class.component.vue",
+            "entity.name.type.class.vue"
+          ]
+        }
+      }
+    ]
+  },
+  "description": "Vue language supports based on volar.",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.8",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-replace": "^6.0.2",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^12.3.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "~22.17.2",
+    "@types/semver": "^7.7.1",
+    "@types/vscode": "^1.105.0",
+    "@types/which": "^3.0.4",
+    "@vue/compiler-sfc": "^3.5.22",
+    "@vue/language-server": "^3.1.1",
+    "@vue/typescript-plugin": "^3.1.1",
+    "laplacenoma": "^0.0.3",
+    "oxlint": "^1.24.0",
+    "reactive-vscode": "^0.4.0",
+    "rollup": "^4.52.5",
+    "semver": "^7.7.3",
+    "tslib": "^2.8.1",
+    "typescript": "^5.9.3",
+    "vscode-languageclient": "^9.0.1",
+    "vscode-tmlanguage-snapshot": "^0.1.3",
+    "which": "^5.0.0"
+  },
+  "displayName": "Vue",
+  "engines": {
+    "vscode": "^1.105.0"
+  },
+  "extensionKind": [
+    "workspace"
+  ],
+  "license": "MIT",
+  "main": "./dist/extension.js",
+  "name": "vue",
+  "packageManager": "pnpm@10.19.0",
+  "prettier": {
+    "semi": false,
+    "singleQuote": true
+  },
+  "private": true,
+  "publisher": "xingqingxyz",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xingqingxyz/vue"
+  },
+  "scripts": {
+    "install-extension": "vsce pack -o vue.vsix && code --install-extension vue.vsix",
+    "lint": "tsc --noEmit && oxlint --fix src",
+    "vscode:prepublish": "concurrently \"rollup -c --environment NODE_ENV:production\" \"rollup -c --environment NODE_ENV:production,PLATFORM:web\"",
+    "watch": "rollup -c -w",
+    "watch-web": "rollup -c -w --environment PLATFORM:web"
+  },
+  "type": "module",
+  "version": "0.2.0"
+}
