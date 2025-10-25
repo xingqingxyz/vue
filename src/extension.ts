@@ -2,16 +2,19 @@ import {
   activateAutoInsertion,
   activateDocumentDropEdit,
   createLabsInfo,
+  State,
 } from '@volar/vscode'
 import { LanguageClient, TransportKind } from '@volar/vscode/node'
 import path from 'path'
 import {
   commands,
   env,
+  workspace,
   type DocumentSelector,
   type ExtensionContext,
 } from 'vscode'
 import { getExtConfig } from './config'
+import { resolveConfigPath } from './util'
 import { logger } from './util/logger'
 
 export async function activate(context: ExtensionContext) {
@@ -19,26 +22,25 @@ export async function activate(context: ExtensionContext) {
     context.extension.packageJSON.contributes.typescriptServerPlugins[0]
       .languages as string[]
   ).map((language) => ({ language, scheme: 'file' })) as DocumentSelector
-  let serverPath = getExtConfig('server.path')
-  if (!serverPath || !path.isAbsolute(serverPath)) {
-    serverPath = context.asAbsolutePath('dist/vueLanguageServerMain.js')
-  }
-  const args = [
-    '--tsdk=' +
-      path.join(env.appRoot, 'extensions/node_modules/typescript/lib'),
-  ]
+  const serverPath =
+    resolveConfigPath(getExtConfig('server.path')) ??
+    context.asAbsolutePath('dist/vueLanguageServerMain.js')
+  const tsdk =
+    resolveConfigPath(
+      workspace.getConfiguration('typescript').get<string>('tsdk')
+    ) ?? path.join(env.appRoot, 'extensions/node_modules/typescript/lib')
   const client = new LanguageClient(
     'Vue',
     {
       run: {
         module: serverPath,
-        args,
+        args: ['--tsdk=' + tsdk],
         transport: TransportKind.ipc,
         options: {},
       },
       debug: {
         module: serverPath,
-        args,
+        args: ['--tsdk=' + tsdk],
         transport: TransportKind.ipc,
         options: { execArgv: ['--nolazy', '--inspect=' + 6009] },
       },
@@ -76,7 +78,9 @@ export async function activate(context: ExtensionContext) {
     commands.registerCommand('vue.action.restartLanguageServer', async () => {
       await commands.executeCommand('typescript.restartTsServer')
       if (client) {
-        await client.stop()
+        if (client.state === State.Running) {
+          await client.stop()
+        }
         await client.start()
       }
     })

@@ -10,7 +10,7 @@
         "--disable-extensions",
         "--enable-proposed-api",
         "xingqingxyz.vue",
-        "${workspaceFolder}"
+        "${workspaceFolder}/../vitvue"
       ],
       "name": "Run Extension",
       "outFiles": ["${workspaceFolder}/dist/**/*.js"],

@@ -1,6 +1,6 @@
 **
 !dist
-!languages
 !schemas
 !syntaxes
+!language-configuration.json
 !LICENSE
