@@ -6,25 +6,16 @@ import {
 } from '@volar/vscode'
 import { LanguageClient, TransportKind } from '@volar/vscode/node'
 import path from 'path'
-import {
-  commands,
-  env,
-  workspace,
-  type DocumentSelector,
-  type ExtensionContext,
-} from 'vscode'
+import { fileURLToPath } from 'url'
+import { commands, env, workspace, type ExtensionContext } from 'vscode'
 import { getExtConfig } from './config'
 import { resolveConfigPath } from './util'
 import { logger } from './util/logger'
 
 export async function activate(context: ExtensionContext) {
-  const selector = (
-    context.extension.packageJSON.contributes.typescriptServerPlugins[0]
-      .languages as string[]
-  ).map((language) => ({ language, scheme: 'file' })) as DocumentSelector
   const serverPath =
     resolveConfigPath(getExtConfig('server.path')) ??
-    context.asAbsolutePath('dist/vueLanguageServerMain.js')
+    fileURLToPath(import.meta.resolve('@vue/language-server'))
   const tsdk =
     resolveConfigPath(
       workspace.getConfiguration('typescript').get<string>('tsdk')
@@ -36,7 +27,6 @@ export async function activate(context: ExtensionContext) {
         module: serverPath,
         args: ['--tsdk=' + tsdk],
         transport: TransportKind.ipc,
-        options: {},
       },
       debug: {
         module: serverPath,
@@ -46,7 +36,7 @@ export async function activate(context: ExtensionContext) {
       },
     },
     {
-      documentSelector: selector as any,
+      documentSelector: ['vue'],
       markdown: {
         isTrusted: true,
         supportHtml: true,
@@ -73,8 +63,8 @@ export async function activate(context: ExtensionContext) {
           () => client.sendNotification('tsserver/response', [seq, undefined])
         )
     ),
-    activateAutoInsertion(selector, client),
-    activateDocumentDropEdit(selector, client),
+    activateAutoInsertion({ language: 'vue', scheme: 'file' }, client),
+    activateDocumentDropEdit({ language: 'vue', scheme: 'file' }, client),
     commands.registerCommand('vue.action.restartLanguageServer', async () => {
       await commands.executeCommand('typescript.restartTsServer')
       if (client) {
