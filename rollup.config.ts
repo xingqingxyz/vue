@@ -12,22 +12,21 @@ import { fileURLToPath } from 'url'
 const isPrebuild = !!process.env.PREBUILD
 const isProd = isPrebuild || process.env.NODE_ENV === 'production'
 const isWeb = process.env.PLATFORM === 'web'
-const isCjs = isPrebuild || isWeb
 const resolve = (id: string) => fileURLToPath(import.meta.resolve(id))
 
 export default defineConfig({
   input: isPrebuild
     ? {
-        vueLanguageServerMain: resolve('@vue/language-server'),
+        vueLanguageServerMain: resolve('./src/shims/vueLanguageServerMain.ts'),
         vueTypeScriptPlugin: resolve('@vue/typescript-plugin'),
       }
     : resolve('./src/extension.ts'),
   output: {
     dir: 'dist',
-    format: isCjs ? 'cjs' : 'es',
+    format: isWeb ? 'cjs' : 'es',
     sourcemap: !isProd,
-    entryFileNames: isCjs ? '[name].cjs' : undefined,
-    chunkFileNames: isCjs ? '[name]-[hash].cjs' : undefined,
+    entryFileNames: isWeb ? '[name].cjs' : undefined,
+    chunkFileNames: isWeb ? '[name]-[hash].cjs' : undefined,
   },
   shimMissingExports: true,
   external: ['vscode'],
@@ -44,7 +43,10 @@ export default defineConfig({
       browser: isWeb,
       preferBuiltins: !isWeb,
     }),
-    commonjs({ sourceMap: !isProd, esmExternals: ['vscode'] }),
+    commonjs({
+      sourceMap: !isProd,
+      esmExternals: ['vscode'],
+    }),
     json(),
     isProd &&
       terser({

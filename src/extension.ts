@@ -6,7 +6,6 @@ import {
 } from '@volar/vscode'
 import { LanguageClient, TransportKind } from '@volar/vscode/node'
 import path from 'path'
-import { fileURLToPath } from 'url'
 import { commands, env, workspace, type ExtensionContext } from 'vscode'
 import { getExtConfig } from './config'
 import { resolveConfigPath } from './util'
@@ -15,7 +14,7 @@ import { logger } from './util/logger'
 export async function activate(context: ExtensionContext) {
   const serverPath =
     resolveConfigPath(getExtConfig('server.path')) ??
-    fileURLToPath(import.meta.resolve('@vue/language-server'))
+    context.asAbsolutePath('dist/vueLanguageServerMain.js')
   const tsdk =
     resolveConfigPath(
       workspace.getConfiguration('typescript').get<string>('tsdk')
@@ -32,7 +31,7 @@ export async function activate(context: ExtensionContext) {
         module: serverPath,
         args: ['--tsdk=' + tsdk],
         transport: TransportKind.ipc,
-        options: { execArgv: ['--nolazy', '--inspect=' + 6009] },
+        options: { execArgv: ['--nolazy', '--inspect=6009'] },
       },
     },
     {

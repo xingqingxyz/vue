@@ -1,6 +1,5 @@
 **
-!node_modules/@vue/typescript-plugin
-!node_modules/@vue/language-server
+!node_modules
 !dist
 !schemas
 !syntaxes
